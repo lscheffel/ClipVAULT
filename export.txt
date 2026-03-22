@@ -1,0 +1,171 @@
+2025-08-07 17:00:18 - text: <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico da Área de Transferência</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        #history-list {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .entry {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .entry time {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .entry-content {
+            margin: 8px 0;
+            word-wrap: break-word;
+        }
+
+        .entry-actions {
+            margin-top: 6px;
+        }
+
+        button {
+            padding: 4px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #2196f3;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            background-color: #1976d2;
+        }
+
+        button.delete {
+            background-color: #e53935;
+        }
+
+        button.delete:hover {
+            background-color: #c62828;
+        }
+
+        button.save {
+            background-color: #43a047;
+        }
+
+        button.save:hover {
+            background-color: #2e7d32;
+        }
+
+        .media-preview {
+            margin-top: 6px;
+            max-width: 100%;
+        }
+
+        audio, video {
+            width: 100%;
+            max-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Histórico da Área de Transferência</h2>
+    <div id="history-list">
+        <!-- Itens do histórico serão inseridos aqui via JS -->
+    </div>
+
+    <script>
+        async function loadHistory() {
+            const result = await window.pywebview.api.get_history();
+            const list = document.getElementById('history-list');
+            list.innerHTML = '';
+
+            result.forEach(entry => {
+                const div = document.createElement('div');
+                div.className = 'entry';
+
+                const time = document.createElement('time');
+                time.textContent = new Date(entry.timestamp).toLocaleString();
+                div.appendChild(time);
+
+                const content = document.createElement('div');
+                content.className = 'entry-content';
+
+                if (entry.type === 'text') {
+                    content.textContent = entry.content;
+                } else if (entry.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = entry.path || entry.content;
+                    img.className = 'media-preview';
+                    content.appendChild(img);
+                } else if (entry.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = entry.path || entry.content;
+                    video.controls = true;
+                    video.className = 'media-preview';
+                    content.appendChild(video);
+                } else if (entry.type === 'audio') {
+                    const audio = document.createElement('audio');
+                    audio.src = entry.path || entry.content;
+                    audio.controls = true;
+                    audio.className = 'media-preview';
+                    content.appendChild(audio);
+                } else {
+                    content.textContent = `[${entry.type}] ${entry.content}`;
+                }
+
+                div.appendChild(content);
+
+                const actions = document.createElement('div');
+                actions.className = 'entry-actions';
+
+                const saveBtn = document.createElement('button');
+                saveBtn.textContent = 'Salvar como...';
+                saveBtn.className = 'save';
+                saveBtn.onclick = () => window.pywebview.api.save_entry(entry.id);
+                actions.appendChild(saveBtn);
+
+                const delBtn = document.createElement('button');
+                delBtn.textContent = 'Excluir';
+                delBtn.className = 'delete';
+                delBtn.onclick = () => {
+                    if (confirm('Deseja realmente excluir este item?')) {
+                        window.pywebview.api.delete_entry(entry.id);
+                        loadHistory(); // atualiza a lista
+                    }
+                };
+                actions.appendChild(delBtn);
+
+                div.appendChild(actions);
+                list.appendChild(div);
+            });
+        }
+
+        window.onload = loadHistory;
+    </script>
+</body>
+</html>
+
+2025-08-07 17:01:42 - text: 

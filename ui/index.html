@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico da Área de Transferência</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f7f7f7;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .clipboard-item {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .timestamp {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .content {
+            margin-top: 5px;
+            word-break: break-word;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 6px 10px;
+            margin-right: 8px;
+            border: none;
+            border-radius: 4px;
+            background: #0078D7;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005fa1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Histórico da Área de Transferência</h1>
+    <div id="clipboard-list"></div>
+
+    <script>
+        async function loadClipboardData() {
+            const data = await window.pywebview.api.get_history(); // vem do Python
+            const list = document.getElementById('clipboard-list');
+            list.innerHTML = '';
+
+            if (!data.length) {
+                list.innerHTML = '<p>Nenhum item no histórico.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'clipboard-item';
+
+                el.innerHTML = `
+                    <div class="timestamp">${new Date(item.timestamp).toLocaleString()}</div>
+                    <div class="content">${item.content}</div>
+                    <div class="actions">
+                        <button onclick="copyToClipboard('${item.content.replace(/'/g, "\\'")}')">Copiar</button>
+                        <button onclick="saveAsText('${item.id}', \`${item.content.replace(/`/g, "\\`")}\`)">Salvar como...</button>
+                        <button onclick="deleteItem(${item.id})">Excluir</button>
+                    </div>
+                `;
+
+                list.appendChild(el);
+            });
+        }
+
+        async function copyToClipboard(content) {
+            await window.pywebview.api.copy_item(content);
+        }
+
+        function saveAsText(id, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `clipboard-${id}.txt`;
+            link.click();
+        }
+
+        async function deleteItem(id) {
+            await window.pywebview.api.delete_item(id);
+            loadClipboardData();
+        }
+
+        // Atualiza a cada 2s
+        setInterval(loadClipboardData, 2000);
+        loadClipboardData();
+    </script>
+</body>
+</html>
