@@ -27,6 +27,9 @@ dist/
 *.bak
 *.swp
 *.swo
+*.db-wal
+*.db-shm
+exports/
 
 # Arquivos compactados (backups, rollback)
 *.zip
@@ -40,6 +43,7 @@ dist/
 .mypy_cache/
 .coverage
 htmlcov/
+coverage/
 
 # Ambientes
 .env

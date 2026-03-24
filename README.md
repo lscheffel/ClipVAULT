@@ -1,55 +1,66 @@
-# ClipVault
+# ClipVault Modern
 
-ClipVault is a simple and lightweight clipboard manager that runs in your system tray. It keeps a history of the text you copy, allowing you to easily access and manage your clipboard history.
+Migração do legado Python/Tkinter para **Node.js + Vite + React + Tailwind + Zustand**.
 
-## Features
+## Stack
 
-*   **Clipboard Monitoring:** Automatically saves any text you copy to the clipboard.
-*   **System Tray Integration:** Runs discreetly in the system tray.
-*   **Web-Based UI:** View and manage your clipboard history through a simple web-based interface.
-*   **History Management:**
-    *   Copy items from your history back to the clipboard.
-    *   Delete individual items from your history.
-    *   Save clipboard items to a text file.
-*   **Data Export:** Export your entire clipboard history to a JSON file for backup or analysis.
+- Frontend: Vite, React, Tailwind CSS, Zustand
+- Backend: Node.js, Express, SQLite (`better-sqlite3`)
+- Clipboard: `clipboardy`
+- Testes: Vitest com cobertura mínima de 60% no Core
 
-## Technologies Used
+## Estrutura
 
-*   **Backend:** Python
-*   **GUI:** `pywebview` (to create a web-based window)
-*   **System Tray:** `pystray`
-*   **Clipboard Access:** `pyperclip`
-*   **Database:** SQLite
+- `src/core`: contratos e regras de negócio puras
+- `src/store`: estado global com Zustand
+- `src/ui`: componentes React granulares
+- `server`: API Node e adapters (db/clipboard/export)
+- `DEV-Incremental.md`: contratos e descrição incremental
 
-## Installation and Usage
+## Configuração
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/ClipVAULT.git
-    cd ClipVAULT
-    ```
+1. Copie `.env.example` para `.env`.
+2. Instale dependências:
+   ```bash
+   npm install
+   ```
+3. Ambiente de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+4. Testes + cobertura:
+   ```bash
+   npm test
+   ```
 
-2.  **Install dependencies:**
-    It's recommended to use a virtual environment.
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
-    ```
-    Install the required Python packages:
-    ```bash
-    pip install pywebview pystray pyperclip Pillow
-    ```
+## Baseline (Fase 1)
 
-3.  **Run the application:**
-    ```bash
-    python main.py
-    ```
-    The application will start and an icon will appear in your system tray. Double-click the tray icon to open the clipboard history window.
+- Runtime prepara automaticamente os diretórios de `CLIPVAULT_DB_PATH` e `CLIPVAULT_EXPORT_DIR`.
+- Variáveis inválidas em `.env` usam fallback seguro com aviso no console.
+- API aplica limite de payload via `CLIPVAULT_BODY_LIMIT_KB` e emite logs estruturados JSON.
+- Verificação completa local:
+  ```bash
+  npm run check
+  ```
 
-## How it Works
+## CI
 
-*   The application runs a background thread that monitors the system clipboard for any changes.
-*   When new text is copied, it's saved into an SQLite database (`clipboard.db`).
-*   The main application provides a web-based user interface using `pywebview`.
-*   The UI communicates with the Python backend to fetch the history, copy items, and delete items.
-*   The system tray icon provides options to show the window, export data, and exit the application.
+- Pipeline definido em `.github/workflows/ci.yml`.
+- Fluxo do CI: `npm ci` + `npm run check`.
+
+## Release
+
+- Versão atual: `1.0.0`.
+- Changelog: `CHANGELOG.md`.
+- Guia operacional: `OPERATIONS.md`.
+- Checklist de integração: `INTEGRATION_CHECKLIST.md`.
+
+## Troubleshooting
+
+- Erro `Failed to fetch`: o frontend nao conseguiu conectar na API.
+- Inicie os dois processos com `npm run dev` (ou apenas API com `npm run dev:api`).
+- Se usar porta diferente, ajuste `VITE_API_BASE_URL` no `.env`.
+
+## Legado
+
+O legado Python permanece em `main.py` e `ui/index.html` para referência de paridade funcional durante a transição.
