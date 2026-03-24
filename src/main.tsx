@@ -1,8 +1,10 @@
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
 import "./styles.css";
+import { cyberTheme } from "./ui/theme/cyberTheme";
 
 const container = document.getElementById("root");
 
@@ -12,6 +14,9 @@ if (!container) {
 
 createRoot(container).render(
   <StrictMode>
-    <App />
+    <ThemeProvider theme={cyberTheme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   </StrictMode>
 );

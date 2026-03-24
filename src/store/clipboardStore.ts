@@ -19,6 +19,7 @@ export const useClipboardStore = create<ClipboardStore>((set, get) => ({
   isPolling: false,
   pollIntervalMs: toNumber(import.meta.env.VITE_POLL_INTERVAL_MS, 2000),
   lastSyncAt: null,
+  densityMode: "comfortable",
 
   async hydrate(limit = 500) {
     set({ status: "loading", errorMessage: null });
@@ -78,6 +79,15 @@ export const useClipboardStore = create<ClipboardStore>((set, get) => ({
 
   setSearch(value) {
     set({ search: value });
+  },
+
+  setDensityMode(mode) {
+    set({ densityMode: mode });
+  },
+
+  toggleDensityMode() {
+    const next = get().densityMode === "comfortable" ? "compact" : "comfortable";
+    set({ densityMode: next });
   },
 
   async copyItem(input) {

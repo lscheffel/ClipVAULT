@@ -1,6 +1,7 @@
 # ClipVault Modern
 
 Migração do legado Python/Tkinter para **Node.js + Vite + React + Tailwind + Zustand**.
+Roadmap ativo de evolução: **X10 ClipVault Library (Local-first Pro)**.
 
 ## Stack
 
@@ -54,6 +55,9 @@ Migração do legado Python/Tkinter para **Node.js + Vite + React + Tailwind + Z
 - Changelog: `CHANGELOG.md`.
 - Guia operacional: `OPERATIONS.md`.
 - Checklist de integração: `INTEGRATION_CHECKLIST.md`.
+- Roadmap X10: `ROADMAP.md`.
+- Backlog X10: `BACKLOG.md`.
+- Playbook X10: `X10_PLAYBOOK.md`.
 
 ## Troubleshooting
 
