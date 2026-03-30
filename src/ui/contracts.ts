@@ -1,5 +1,6 @@
 import type { ClipboardItem } from "../core/contracts";
 import type { DensityMode } from "../store/clipboardStore.types";
+import type { RefObject } from "react";
 
 export interface HistoryListProps {
   items: ClipboardItem[];
@@ -19,6 +20,7 @@ export interface HistoryItemProps {
 export interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
+  inputRef?: RefObject<HTMLInputElement>;
 }
 
 export interface HeaderBarProps {

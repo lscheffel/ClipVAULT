@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useClipboardStore } from "./store/clipboardStore";
+import { CommandPalette } from "./ui/components/CommandPalette";
 import { HeaderBar } from "./ui/components/HeaderBar";
 import { HistoryList } from "./ui/components/HistoryList";
 import { SearchBar } from "./ui/components/SearchBar";
@@ -20,8 +21,12 @@ export const App = () => {
   const deleteItem = useClipboardStore((state) => state.deleteItem);
   const exportHistory = useClipboardStore((state) => state.exportHistory);
   const setSearch = useClipboardStore((state) => state.setSearch);
+  const densityMode = useClipboardStore((state) => state.densityMode);
+  const toggleDensityMode = useClipboardStore((state) => state.toggleDensityMode);
 
   const filteredItems = useFilteredItems(items, search);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   useEffect(() => {
     startPolling();
@@ -29,6 +34,20 @@ export const App = () => {
       stopPolling();
     };
   }, [startPolling, stopPolling]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setPaletteOpen(true);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   const handleExport = async () => {
     const outputPath = await exportHistory();
@@ -38,16 +57,33 @@ export const App = () => {
   };
 
   return (
-    <main className="min-h-screen bg-app px-4 py-8 text-slate-800">
+    <main className="min-h-screen bg-app px-4 py-8 text-slate-100">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-4">
-        <HeaderBar onRefresh={() => void syncTick()} onExport={() => void handleExport()} total={items.length} />
-        <SearchBar value={search} onChange={setSearch} />
+        <HeaderBar
+          onRefresh={() => void syncTick()}
+          onExport={() => void handleExport()}
+          onToggleDensity={toggleDensityMode}
+          onOpenPalette={() => setPaletteOpen(true)}
+          densityMode={densityMode}
+          total={items.length}
+        />
+        <SearchBar value={search} onChange={setSearch} inputRef={searchInputRef} />
         <StatusStrip lastSyncAt={lastSyncAt} errorMessage={errorMessage} />
         <HistoryList
           items={filteredItems}
           isLoading={status === "loading" && items.length === 0}
+          densityMode={densityMode}
           onCopy={(input) => void copyItem(input)}
           onDelete={(id) => void deleteItem(id)}
+        />
+        <CommandPalette
+          open={paletteOpen}
+          onClose={() => setPaletteOpen(false)}
+          onRefresh={() => void syncTick()}
+          onExport={() => void handleExport()}
+          onToggleDensity={toggleDensityMode}
+          onFocusSearch={() => searchInputRef.current?.focus()}
+          densityMode={densityMode}
         />
       </section>
     </main>

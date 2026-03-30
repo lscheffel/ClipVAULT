@@ -1,10 +1,13 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-import { app, BrowserWindow } from "electron";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const path = require("node:path");
+const electron = require("electron");
+console.log("electron module:", electron);
+console.log("typeof electron:", typeof electron);
+if (electron && electron.app) {
+  console.log("electron.app exists");
+} else {
+  console.log("electron.app does NOT exist");
+}
+const { app, BrowserWindow } = electron;
 
 const isDevelopment = Boolean(process.env.ELECTRON_START_URL);
 

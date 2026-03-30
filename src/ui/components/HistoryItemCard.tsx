@@ -4,7 +4,7 @@ const formatTimestamp = (value: string): string => {
   return new Date(value).toLocaleString("pt-BR");
 };
 
-export const HistoryItemCard = ({ item, onCopy, onDelete }: HistoryItemProps) => {
+export const HistoryItemCard = ({ item, densityMode, onCopy, onDelete }: HistoryItemProps) => {
   const handleSaveText = () => {
     const blob = new Blob([item.content], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -15,16 +15,24 @@ export const HistoryItemCard = ({ item, onCopy, onDelete }: HistoryItemProps) =>
     URL.revokeObjectURL(url);
   };
 
+  const compact = densityMode === "compact";
+
   return (
-    <article className="rounded-2xl border border-brand-100 bg-white p-4 shadow-panel transition hover:-translate-y-0.5 hover:shadow-lg">
-      <header className="mb-2 flex items-center justify-between gap-4 text-xs text-slate-500">
+    <article
+      className={`rounded-2xl border border-cyan-400/20 bg-[#0b1020]/95 shadow-panel transition hover:-translate-y-0.5 hover:shadow-lg ${
+        compact ? "p-3" : "p-4"
+      }`}
+    >
+      <header className={`flex items-center justify-between gap-4 text-xs text-slate-400 ${compact ? "mb-1" : "mb-2"}`}>
         <span>#{item.id}</span>
         <time dateTime={item.timestamp}>{formatTimestamp(item.timestamp)}</time>
       </header>
 
-      <p className="line-clamp-3 whitespace-pre-wrap break-words text-sm text-slate-700">{item.content}</p>
+      <p className={`line-clamp-3 whitespace-pre-wrap break-words text-slate-200 ${compact ? "text-xs" : "text-sm"}`}>
+        {item.content}
+      </p>
 
-      <footer className="mt-4 flex flex-wrap gap-2">
+      <footer className={`flex flex-wrap gap-2 ${compact ? "mt-2" : "mt-4"}`}>
         <button
           type="button"
           onClick={() => onCopy(item.id)}

@@ -17,6 +17,7 @@ const buildApiBaseCandidates = (): string[] => {
     }
   }
 
+  candidates.push("http://127.0.0.1:8787");
   candidates.push("http://localhost:8787");
   return [...new Set(candidates)];
 };

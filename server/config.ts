@@ -43,8 +43,21 @@ const resolvePath = (name: string, value: string | undefined, fallback: string):
   return path.isAbsolute(raw) ? raw : path.resolve(process.cwd(), raw);
 };
 
+const resolveApiPort = (): number => {
+  const explicitApiPort = process.env.CLIPVAULT_API_PORT;
+  const legacyPort = process.env.PORT;
+
+  if (explicitApiPort && legacyPort && explicitApiPort !== legacyPort) {
+    configWarnings.push(
+      `[config] CLIPVAULT_API_PORT (${explicitApiPort}) diferente de PORT (${legacyPort}). Usando CLIPVAULT_API_PORT.`
+    );
+  }
+
+  return parsePositiveInt("CLIPVAULT_API_PORT", explicitApiPort ?? legacyPort, 8787);
+};
+
 export const config: AppConfig = {
-  port: parsePositiveInt("PORT", process.env.PORT, 8787),
+  port: resolveApiPort(),
   dbPath: resolvePath("CLIPVAULT_DB_PATH", process.env.CLIPVAULT_DB_PATH, "clipboard.db"),
   exportDir: resolvePath("CLIPVAULT_EXPORT_DIR", process.env.CLIPVAULT_EXPORT_DIR, "exports"),
   clipboardPollMs: parsePositiveInt("CLIPVAULT_CLIPBOARD_POLL_MS", process.env.CLIPVAULT_CLIPBOARD_POLL_MS, 1000),

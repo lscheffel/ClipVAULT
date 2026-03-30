@@ -4,18 +4,21 @@
 
 :root {
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
-  color: #0f172a;
+  color: #dbeafe;
+  background-color: #040610;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #040610;
 }
 
 .bg-app {
   background:
-    radial-gradient(circle at 15% 10%, rgba(53, 122, 99, 0.25), transparent 30%),
-    radial-gradient(circle at 85% 20%, rgba(252, 211, 77, 0.3), transparent 28%),
-    linear-gradient(160deg, #edf6f2 0%, #f8fafc 50%, #fef3c7 100%);
+    radial-gradient(circle at 18% 6%, rgba(0, 229, 255, 0.25), transparent 30%),
+    radial-gradient(circle at 82% 14%, rgba(255, 78, 205, 0.26), transparent 28%),
+    radial-gradient(circle at 55% 88%, rgba(0, 245, 184, 0.16), transparent 32%),
+    linear-gradient(162deg, #040610 0%, #071022 44%, #090f26 100%);
 }

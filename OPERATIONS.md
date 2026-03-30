@@ -8,7 +8,8 @@
 6. Execute validação completa com `npm run check`.
 
 Parâmetros críticos:
-- `PORT`: porta da API.
+- `CLIPVAULT_API_PORT`: porta da API.
+- `PORT`: legado opcional (usado apenas se `CLIPVAULT_API_PORT` não estiver definido).
 - `CLIPVAULT_DB_PATH`: caminho do SQLite.
 - `CLIPVAULT_EXPORT_DIR`: diretório de export.
 - `CLIPVAULT_CLIPBOARD_POLL_MS`: intervalo de captura.

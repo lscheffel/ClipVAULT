@@ -1,34 +1,55 @@
-interface HeaderBarProps {
-  onRefresh: () => void;
-  onExport: () => void;
-  total: number;
-}
+import { AutoAwesome, DensitySmall, Hub, Refresh } from "@mui/icons-material";
+import { Button } from "@mui/material";
 
-export const HeaderBar = ({ onRefresh, onExport, total }: HeaderBarProps) => {
+import type { HeaderBarProps } from "../contracts";
+
+export const HeaderBar = ({ onRefresh, onExport, onToggleDensity, onOpenPalette, densityMode, total }: HeaderBarProps) => {
   return (
-    <header className="rounded-3xl bg-brand-900/95 p-6 text-white shadow-panel">
+    <header className="rounded-3xl border border-cyan-400/20 bg-[#0a1126]/90 p-6 text-white shadow-panel">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-brand-100">ClipVault</p>
-          <h1 className="mt-2 text-2xl font-semibold">Histórico da Área de Transferência</h1>
-          <p className="mt-2 text-sm text-brand-100">Itens capturados: {total}</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">ClipVault X10</p>
+          <h1 className="mt-2 text-2xl font-semibold">Biblioteca da Área de Transferência</h1>
+          <p className="mt-2 text-sm text-cyan-100">Itens capturados: {total}</p>
         </div>
 
-        <div className="flex gap-2">
-          <button
-            type="button"
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outlined"
             onClick={onRefresh}
-            className="rounded-xl border border-brand-100/30 bg-brand-700 px-3 py-2 text-xs font-semibold transition hover:bg-brand-500"
+            size="small"
+            startIcon={<Refresh fontSize="small" />}
+            sx={{ borderColor: "rgba(34,211,238,.45)", color: "#67e8f9" }}
           >
             Atualizar
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<DensitySmall fontSize="small" />}
+            onClick={onToggleDensity}
+            sx={{ borderColor: "rgba(34,211,238,.45)", color: "#67e8f9" }}
+          >
+            Densidade: {densityMode === "comfortable" ? "Confortável" : "Compacta"}
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<Hub fontSize="small" />}
+            onClick={onOpenPalette}
+            sx={{ borderColor: "rgba(34,211,238,.45)", color: "#67e8f9" }}
+          >
+            Command Palette
+          </Button>
+          <Button
+            variant="contained"
             onClick={onExport}
-            className="rounded-xl bg-amber-300 px-3 py-2 text-xs font-semibold text-brand-900 transition hover:bg-amber-200"
+            size="small"
+            startIcon={<AutoAwesome fontSize="small" />}
+            sx={{ background: "linear-gradient(90deg,#00e5ff,#ff4ecd)", color: "#04111f" }}
           >
             Exportar JSON
-          </button>
+          </Button>
         </div>
       </div>
     </header>
