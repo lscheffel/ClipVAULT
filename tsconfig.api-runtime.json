@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./server-runtime/dist",
+    "rootDir": ".",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "sourceMap": true,
+    "types": ["node"]
+  },
+  "include": ["server/**/*.ts", "src/core/**/*.ts"],
+  "exclude": ["**/*.spec.ts", "node_modules", "dist", "server-runtime"]
+}

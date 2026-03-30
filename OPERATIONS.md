@@ -7,6 +7,10 @@
 5. Execute smoke operacional com `npm run smoke`.
 6. Execute validação completa com `npm run check`.
 
+Observação:
+- `dev:api` compila uma vez e entra em hot-reload com `tsc --watch` + `node --watch` (fallback robusto para ambientes Windows onde `tsx` falha com `spawn EPERM`).
+- `smoke` reutiliza o mesmo runtime compilado (`npm run build:api-runtime && node server-runtime/dist/server/smoke.js`).
+
 Parâmetros críticos:
 - `CLIPVAULT_API_PORT`: porta da API.
 - `PORT`: legado opcional (usado apenas se `CLIPVAULT_API_PORT` não estiver definido).

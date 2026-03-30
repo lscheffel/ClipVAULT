@@ -20,6 +20,7 @@ node_modules/
 # Build
 build/
 dist/
+server-runtime/dist/
 
 # Logs e temporários
 *.log

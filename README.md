@@ -63,6 +63,8 @@ Roadmap ativo de evolução: **X10 ClipVault Library (Local-first Pro)**.
 
 - Erro `Failed to fetch`: o frontend nao conseguiu conectar na API.
 - Inicie os dois processos com `npm run dev` (ou apenas API com `npm run dev:api`).
+- Se `tsx` falhar no Windows (`spawn EPERM`), o `dev:api` usa `tsc --watch` + `node --watch` sem depender do `tsx`.
+- O smoke (`npm run smoke`) também usa runtime compilado + `node` sem depender do `tsx`.
 - Se usar porta diferente, ajuste `CLIPVAULT_API_PORT` no `.env` (ou `VITE_API_BASE_URL` para base URL explícita).
 
 ## Legado
